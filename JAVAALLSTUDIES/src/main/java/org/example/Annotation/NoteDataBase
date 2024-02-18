@@ -1,0 +1,15 @@
+A classe DriverManager é a responsável por se comunicar com todos os drivers que você
+deixou disponível. Para isso, invocamos o método estático getConnection com uma String
+que indica a qual banco desejamos nos conectar
+
+
+
+Factory: factory é uma classe que criaremos. Ela vai possuir o código da conexão e
+sempre que precisarmos dessa classe vamos instanciá-la onde for preciso e utilizar a conexão.
+Em tese isso para evitar duplicação de codigo
+
+A camada DAO significa "Data Access Object", ou seja, é uma camada onde você deve centralizar
+todo o acesso ao banco de dados do seu sistema.Note que não se deve aplicar regras de negócios nessa camada,
+apenas deve ser feita a comunicação com o banco de dados
+
+//anotar tudo de novo do banco de dados e http refazer e anota primeiro de tudo
