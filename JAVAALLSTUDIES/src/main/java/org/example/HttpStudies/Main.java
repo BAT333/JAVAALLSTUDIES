@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.IDENTITY).create();
         //para pegar arquivo json e transforma e infos para objeto
-        AddressRecord record = gson.fromJson(ZipCodeSearch.Search("12345678"), AddressRecord.class);
+        AddressRecord record = gson.fromJson(ZipCodeSearch.Search("08460367"), AddressRecord.class);
 
         Address address = new Address(record);
      File file = FileJson.CreateFiles("DIRETORIO","PASTAJOSN","JOSN.json");

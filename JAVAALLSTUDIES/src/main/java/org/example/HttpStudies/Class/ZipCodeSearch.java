@@ -22,7 +22,7 @@ public interface ZipCodeSearch {
             if (zipCode.length() != 8 || matcher.find()) {
                 throw new ExceptionsZipcod("ERROR WHEN TYPING ZIP CODE");
             }
-            URI uri = URI.create("https://viacep.com.br/ws/01001000/json/");
+            URI uri = URI.create("https://viacep.com.br/ws/"+zipCode+"/json/");
             //RESUMINDO
             //A classe HttpClient é responsável por fazer requisições HTTP.
             //A classe HttpRequest é utilizada para construir uma requisição HTTP.

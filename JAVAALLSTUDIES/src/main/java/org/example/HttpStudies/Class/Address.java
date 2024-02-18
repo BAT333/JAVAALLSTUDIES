@@ -1,6 +1,8 @@
 package org.example.HttpStudies.Class;
 
 import com.google.gson.annotations.SerializedName;
+import org.example.DataBase.Connection.AddressDAO;
+import org.example.DataBase.Connection.FactoryConnection;
 
 public class Address {
 
@@ -12,6 +14,8 @@ public class Address {
     private String locality;
     private String state;
     private int number;
+
+    private FactoryConnection connection;
     
     public Address(AddressRecord ar){
         this.zipCod = Integer.valueOf(ar.cep().replace("-",""));
@@ -20,8 +24,10 @@ public class Address {
         this.neighborhood = ar.bairro();
         this.locality = ar.localidade();
         this.state = ar.uf();
+        this.connection = new FactoryConnection();
 
     }
+
 
     public int getZipCod(){
         return zipCod;
@@ -52,6 +58,8 @@ public class Address {
 
     @Override
     public String toString() {
+        new AddressDAO(connection.RecoveryConnection()).AddressDataBase(this);
+        new AddressDAO(connection.RecoveryConnection()).DeletingAddress(this);
         return "Address{" +
                 "zipCod=" + zipCod +
                 ", publicPlace='" + publicPlace + '\'' +

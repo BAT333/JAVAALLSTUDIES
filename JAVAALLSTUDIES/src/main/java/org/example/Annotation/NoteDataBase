@@ -12,4 +12,10 @@ A camada DAO significa "Data Access Object", ou seja, é uma camada onde você d
 todo o acesso ao banco de dados do seu sistema.Note que não se deve aplicar regras de negócios nessa camada,
 apenas deve ser feita a comunicação com o banco de dados
 
+
+O método prepareStatement é usado para criar novos objetos PreparedStatement .
+Ao contrário do método createStatement , a instrução SQL deve ser fornecida quando o objeto
+ PreparedStatement for criado Nesse momento, a instrução SQL é pré-compilada para uso.
+
 //anotar tudo de novo do banco de dados e http refazer e anota primeiro de tudo
+
