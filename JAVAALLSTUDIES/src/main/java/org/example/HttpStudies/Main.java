@@ -3,6 +3,7 @@ package org.example.HttpStudies;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.example.DataBase.Connection.AddressDAO;
 import org.example.HttpStudies.Class.Address;
 import org.example.HttpStudies.Class.AddressRecord;
 import org.example.HttpStudies.Class.ZipCodeSearch;
@@ -19,7 +20,13 @@ public class Main {
         Address address = new Address(record);
      File file = FileJson.CreateFiles("DIRETORIO","PASTAJOSN","JOSN.json");
         FileJson.CreateJson(file,address);
-        System.out.println(address);
+        address.AddDataBase();
+        address.update(856,8460367);
+        for(Address see :address.addressList()){
+
+            System.out.println(see);
+
+        }
 
     }
 }

@@ -17,5 +17,60 @@ O método prepareStatement é usado para criar novos objetos PreparedStatement .
 Ao contrário do método createStatement , a instrução SQL deve ser fornecida quando o objeto
  PreparedStatement for criado Nesse momento, a instrução SQL é pré-compilada para uso.
 
+                                     executeQuery
+Para executar o comando SQL, invocamos o método stmt. executeQuery(strSelect) .
+Ele retorna o resultado da consulta em um objeto ResultSet (chamado rset ).
+O ResultSet modela a tabela retornada, que pode ser acessada por meio de um cursor de linha.
+executeQuery(): Este método é usado para recuperar dados do banco de dados usando a consulta SELECT
+
+                                    pools de conexoes
+Pools de conexões são usados para garantir o desempenho da execução de comandos sobre um banco de dados.
+Abrir e manter uma conexão de banco de dados para cada usuário, especialmente requisições feitas
+a uma aplicação web dinâmica baseada em banco de dados, é dispendioso e desperdiça recursos.
+
+Em engenharia de software, um pool de conexões é um cache de conexões de banco de dados
+mantido de forma que as conexões possam ser reutilizadas quando requisições futuras ao banco de
+dados forem requeridas. Pools de conexões são usados para garantir o desempenho da execução de comandos
+sobre um banco de dados.
+                                     con.setAutoCommit(falso);commit
+Desativando o modo de confirmação automática
+Quando uma conexão é criada, ela está no modo de confirmação automática.
+Isso significa que cada instrução SQL individual é tratada como uma transação
+e é automaticamente confirmada logo após ser executada. (Para ser mais preciso,
+o padrão é que uma instrução SQL seja confirmada quando for concluída, não quando for
+executada. Uma instrução é concluída quando todos os seus conjuntos de resultados e contagens
+de atualização forem recuperados. Em quase todos os casos, entretanto , uma instrução é concluída
+e, portanto, confirmada, logo após ser executada.)
+
+A maneira de permitir que duas ou mais instruções sejam agrupadas em uma transação é desabilitar o modo de
+confirmação automática. Isso é demonstrado no código a seguir, onde conestá uma conexão ativa:
+
+con.setAutoCommit(falso);
+Comprometendo transações
+Depois que o modo de confirmação automática for desabilitado, nenhuma instrução SQL será confirmada
+até que você chame o método commitexplicitamente. Todas as instruções executadas após a chamada anterior
+ao método commit
+
+explicado que setautocommit(falso) desabilita qualquer tipo de alteração no banco sem permissão
+e so aceita depois que da commit
+
+                                       rollback()
+Usando transações para preservar a integridade dos dados
+Além de agrupar instruções para execução como uma unidade, as transações podem ajudar a preservar
+a integridade dos dados em uma tabela. Por exemplo, imagine que um funcionário deveria inserir novos
+preços de café na tabela COFFEES, mas demorou alguns dias para fazê-lo. Entretanto, os preços subiram e hoje
+o proprietário está em vias de entrar nos preços mais elevados. O funcionário finalmente consegue inserir os
+preços já desatualizados ao mesmo tempo em que o proprietário tenta atualizar a tabela. Após inserir os preços
+desatualizados, o funcionário percebe que eles não são mais válidos e aciona o Connectionmétodo rollbackpara
+desfazer seus efeitos. (O método rollbackaborta uma transação e restaura os valores para o que eram antes da
+tentativa de atualização.) Ao mesmo tempo, o proprietário está executando uma SELECTinstrução e imprimindo os
+novos preços. Nesta situação, é possível que o proprietário imprima um preço que foi revertido para o valor
+anterior, tornando o preço impresso incorreto.
+
+rollback() = meio que ele desfaz as alteração feita no banco se der algum erro ou algo do tipo
+
+
+
 //anotar tudo de novo do banco de dados e http refazer e anota primeiro de tudo
 
+//revisar tudo
