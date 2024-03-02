@@ -6,6 +6,10 @@ O que significa API? API significa Application Programming Interface
 Aplicação refere-se a qualquer software com uma função distinta. A interface
 pode ser pensada como um contrato de serviço entre duas aplicações.
 
+A classe HttpClient é responsável por fazer requisições HTTP.
+A classe HttpRequest é utilizada para construir uma requisição HTTP.
+A classe HttpResponse é responsável por armazenar a resposta da requisição HTTP.
+
 
                             ### HTTP ###
 

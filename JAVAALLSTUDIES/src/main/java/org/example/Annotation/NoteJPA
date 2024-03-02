@@ -1,0 +1,132 @@
+Java Persistence API é uma API padrão da linguagem Java que descreve uma interface comum para frameworks
+de persistência de dados. A JPA define um meio de mapeamento objeto-relacional para objetos Java simples e comuns,
+
+A JPA padroniza a importante tarefa de mapeamento relacional de objetos utilizando anotações ou o XML para mapear
+objetos para uma ou mais tabelas de um banco de dados.
+Motivos para te criado foi que JBDC era muito verboso e tambem que AutoClopamento que qualquer mudança no banco de
+dados teria que mudar tudo no codigo
+
+                                                diferença
+Aprender o JDBC é essencial para entender os fundamentos do acesso a dados e ter um controle granular
+sobre as operações de banco de dados. O Spring JPA, por outro lado, oferece uma camada de abstração mais
+alta e recursos poderosos para aumentar a produtividad
+
+JDBC depende de banco de dados, o que significa que scripts diferentes devem ser escritos para bancos de dados
+diferentes. Por outro lado, JPA é independente de banco de dados, o que significa que o mesmo código pode ser
+usado em vários bancos de dados com poucas (ou nenhuma) modificações.
+
+O Hibernate é de fato o framework ORM, ou seja, a implementação física do que você usará para persistir,
+remover, atualizar ou buscar dados no SGBD. Por outro lado, o JPA é uma camada que descreve uma interface
+comum para frameworks ORM.
+
+PARA CONFIGURA UMA JPA VC PRIMEIRO TEM FAZER TUDO ISSO
+PRIMEIRO CRIAR UM FOLDE/PASTA
+COM ESSE NAME :  META-INF
+CRIAR UM FILE COM NAME : persistence.xml
+ <?xml version="1.0" encoding="UTF-8"?>
+ //CRIA UM PERSISTENCE MOSTRANDO ELE
+ <persistence version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+              //CONFIGURA BANCO DE DADOS
+              //NAME PODE SER QUALQUER UM MAIS SE VC CRIAR 2 BANCO DE DADOS VC PRECISA CONFIGURA OS 2 DANDO NOME DIFERTES
+              //O atributo transaction-type indica que nossa unidade de persistência usa o nível
+              //de recurso EntityTransaction ao invés de transações JTA. O elemento class lista as
+              //entidades que são parte da unidade de persistência.
+     <persistence-unit name="comex" transaction-type="RESOURCE_LOCAL">
+     //AQUI CONFIGURAÇÃO DO BANCO QUE VC VAI USAR
+         <properties>
+             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/comex"/>
+             <property name="javax.persistence.jdbc.user" value="root"/>
+             <property name="javax.persistence.jdbc.password" value="Rafael234"/>
+             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
+         </properties>
+
+     </persistence-unit>
+ </persistence>
+ // DEPENDENDO DA JPA QUE VC TIVER ULTILIZANDO VC PRECISA DIZER QUAL CAMINHO DELA
+         <class>src/main/java/org/example/PercistenciaHibernate/Class/Address.java</class>
+// DESTA FORMA
+ // VC PRECISA CRIA UMA CLASS PARA REPRESENTAR ENTIDADE  UMA TABELA DO BANCO DE DADOS
+
+
+// EXPLICANDO ALGUMAS ANOTAÇÃO JPA
+@Entity    ---> QUE ESSA CLASS REPRESENTA ALGUMA TABELA NO BANCO DE DADOS
+@Table(name = "")   -----> SE SEU BANCO DE DADOS E SUA TABELA TIVER NOME DIFERENTES JPA ACHAR TABELA REPRESENTADA PELA
+ENTIDADE
+   @Id ----> QUE AQUELE ATRIBUTO É CHAVE PRIMARIA NO BANCO DE DADOS
+   @GeneratedValue(strategy = GenerationType.IDENTITY)  ---> QUE CHAVE PRIMARIA SE COMPLETA TADINHA E GenerationType
+   DEPENDE DO TIPO DO SEU BANCO
+   @Column(name = "") -----> SUA COLUNA TEM NOME DIFERENTE DO ATRIBUTO, AQUI VC PASSA ESSA ANOTAÇÃO DIZ QUE NAME DESTA
+   COLUNA É IGUAL ESSE ATRIBUTO
+   // E SE NOMES FOREM IGUAL NÃO PRECISA
+
+
+   // Para add infos no banco de dados
+   // primeiro criar  EntityManagerFactory e depois fazer Persistece dele e criar passando como parametro as configuração
+   que vc fez no banco de dados como no que vc deu no meu caso comex
+          EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("comex");
+    // vc cria entitymesger e criar
+           EntityManager entityManager = managerFactory.createEntityManager();
+    //aqui para começar a implementar a begin
+           entityManager.getTransaction().begin();
+           // com isso faz salvar no banco de dados e amarzenar infos
+           entityManager.persist(cadastro);
+           // aqui para dar commit e inserir
+           entityManager.getTransaction().commit();
+           ____________________________________________________
+
+
+                  EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("comex");
+                   EntityManager entityManager = managerFactory.createEntityManager();
+                   entityManager.getTransaction().begin();
+                   entityManager.persist(cadastro);
+                   entityManager.getTransaction().commit();
+       -----------------------------------------------------------------------
+       //    @Enumerated(EnumType.STRING)
+Aqui faz salvar de diferentes maneira pelo tipo int ou tipo String dele
+
+merge() ---> faz com que o JPA que esta no estado  detacherd volte para manged que faz recer infos
+atualizar ou commit no banco des que vc não fecha a conexão com close ou ja tenha feito o Commit
+ //atualizar;
+
+        Endereco procuraEnderecco = entityManager.find(Endereco.class, 3);
+        procuraEnderecco.setCep("123455");
+        entityManager.flush();
+
+        entityManager.merge(procuraEnderecco);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+  // pesquisar
+  //basicamente vc pega class e passa chave primaria e oq vc quer pesquisar ou deletar
+  Endereco procuraEnderecco = entityManager.find(Endereco.class, 3);
+
+                Endereco merge = entityManager.merge(procuraEnderecco);
+                System.out.println("Pesquisar "+merge);
+   // find(Endereco.class,3);
+   //faz pesquisa no banco de dados passa entidade/class, e pega pelachave primaria
+   //.remove() --> remove as coisas do banco de dados, detalhe tem que tar em
+   //menager
+
+
+   // pesquisa de tudo na tabela com JPA
+String jpql = "SELECT e  FROM Endereco e ";---> mesma forma de pesquisa do sql so muda * ou coisas do tipo
+ List<Endereco> enderecoList =  entityManager.createQuery(jpql,Endereco.class).getResultList();
+ //manda a comando para createQuery e traforma e lista com get Resulte
+ //filtrando  por paramentro
+ String jpql = "SELECT e  FROM Endereco e WHERE e.cep = :cep";
+List<Endereco> enderecoList =  entityManager.createQuery(jpql,Endereco.class).setParameter("cep","12314").getResultList();
+ String jpql = "SELECT e  FROM Endereco e WHERE e.cep = ?1";
+ //pesquisa de uma coisa com uma linha so 
+         String jpql = "SELECT e.bairro  FROM Endereco e WHERE e.id = ?1";
+         String enderecoList =  entityManager.createQuery(jpql,String.class).setParameter(1,5).getSingleResult();
+
+
+    @OneToMany Aqui mostra que entidade banco relacional
+
+

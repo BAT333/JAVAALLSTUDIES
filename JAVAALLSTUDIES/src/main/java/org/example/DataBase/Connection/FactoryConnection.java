@@ -13,6 +13,7 @@ public class FactoryConnection {
     //getConnection = qual banco vc quer conectar
     public Connection RecoveryConnection(){
         try {
+           // DriverManager.getConnection("jdbc:mysql://localhost:3306/comex?userName:root?passaword:Rafael234");
             return this.CreateDataSource().getConnection();
         }catch (SQLException ex){
             throw new RuntimeException(ex);
