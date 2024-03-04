@@ -122,11 +122,36 @@ String jpql = "SELECT e  FROM Endereco e ";---> mesma forma de pesquisa do sql s
  String jpql = "SELECT e  FROM Endereco e WHERE e.cep = :cep";
 List<Endereco> enderecoList =  entityManager.createQuery(jpql,Endereco.class).setParameter("cep","12314").getResultList();
  String jpql = "SELECT e  FROM Endereco e WHERE e.cep = ?1";
- //pesquisa de uma coisa com uma linha so 
+
+ //pesquisa de uma coisa com uma linha so
          String jpql = "SELECT e.bairro  FROM Endereco e WHERE e.id = ?1";
          String enderecoList =  entityManager.createQuery(jpql,String.class).setParameter(1,5).getSingleResult();
 
+ // pesquisa por POR ALGO EXPECIFICO
+  public List<String> listName(){
+         String sql = "SELECT c.name FROM Client c";
+         List<String> clients = this.manager.createQuery(sql,String.class).getResultList();
+         return clients;
 
-    @OneToMany Aqui mostra que entidade banco relacional
+     }
+  // POR UMA UNICA COISA
+public String listName(String name){
+         String sql = "SELECT c.name FROM Client c WHERE c.name = ?1";
+         String nome = this.manager.createQuery(sql,String.class).setParameter(1,name).getSingleResult();
+         return nome;
+
+     }
+     //se for um retorno de um coisa especifica tipo nome
+     // vc tem colocar List<String> da tipagem dele que String
+
+
+     //como vc tem fazer para crias um banco relacional
+     // primeiro vc tem que cria as duas tabelas em java
+     //depois vc tem que na tabela que vc vai relacionar normalmente de muitos para um
+     // @OneToMany colocar essa tag
+     // antes disso vc tem cadastra a categoria para depois passar para eles relacionamente
+
+
+    @ManyToOne Aqui mostra que entidade banco relacional
 
 

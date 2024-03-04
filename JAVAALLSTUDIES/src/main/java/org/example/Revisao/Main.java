@@ -26,6 +26,7 @@ public class Main {
             System.out.println(mostra);
 
         }
+
         serviceEnderecoEntidade.fechar();
         /*
         ServiceEndereco serviceEndereco = new ServiceEndereco(endereco);
