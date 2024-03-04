@@ -19,8 +19,36 @@ O Hibernate é de fato o framework ORM, ou seja, a implementação física do qu
 remover, atualizar ou buscar dados no SGBD. Por outro lado, o JPA é uma camada que descreve uma interface
 comum para frameworks ORM.
 
+//Trasformando class em banco de dados com hibernate
+@Entity    ---> QUE ESSA CLASS REPRESENTA ALGUMA TABELA NO BANCO DE DADOS
+@Entity -> mostra que aqui tabela, principal
+@Table(name="user") -> se caso nome da tabela e class for diferente,aqui coloca nome da tabela
+no banco de dados
+class User {
+   @Id-> define que chave primaria
+   @GeneratedValue(strategy = GenerationType.IDENTITY)->que vai gerando sozinho
+   @Column(name="id")-> aqui mostra como esta no banco de dados, que igual nome que ta na class
+   public Integer id;
+
+   @Column(name="name", unique=true, length=100)
+   aqui configuração da tabela que name tem ser unico, e que no maximo tem 100 carcteres
+   public String name;
+
+   @Column(name="level", nullable=true)
+   aqui nullable mostra que não pode ser null
+   public Integer level;
+
+   @Column(name="created_date")
+   public Date createdDate;
+}
+
+
+
+
+______________________________________________________________________________________________
+
 PARA CONFIGURA UMA JPA VC PRIMEIRO TEM FAZER TUDO ISSO
-PRIMEIRO CRIAR UM FOLDE/PASTA
+PRIMEIRO CRIAR UM FOLDE/PASTA TEM CRIAR NO ARQUIVO RESOURCER
 COM ESSE NAME :  META-INF
 CRIAR UM FILE COM NAME : persistence.xml
  <?xml version="1.0" encoding="UTF-8"?>
@@ -47,14 +75,156 @@ CRIAR UM FILE COM NAME : persistence.xml
 
      </persistence-unit>
  </persistence>
- // DEPENDENDO DA JPA QUE VC TIVER ULTILIZANDO VC PRECISA DIZER QUAL CAMINHO DELA
-         <class>src/main/java/org/example/PercistenciaHibernate/Class/Address.java</class>
+// DEPENDENDO DA JPA QUE VC TIVER ULTILIZANDO VC PRECISA DIZER QUAL CAMINHO DELA
+    <class>src/main/java/org/example/PercistenciaHibernate/Class/Address.java</class>
 // DESTA FORMA
- // VC PRECISA CRIA UMA CLASS PARA REPRESENTAR ENTIDADE  UMA TABELA DO BANCO DE DADOS
+// VC PRECISA CRIA UMA CLASS PARA REPRESENTAR ENTIDADE  UMA TABELA DO BANCO DE DADOS
+
+aqui para saber conversão dos bancos de dados e dos comando especificos de cada um deles
+e tipagem que casa banco aceita
+        <property name="dialect">org.hibernate.dialect.Oracle9Dialect</property>
+
+aqui para conectar qual branco de dados que é ex: mysql,h2,oracle etc
+    	<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+aqui url dele
+    	<property name="connection.url">jdbc:oracle:thin:@localhost:1521:supershop</property>
+aqui nome do seu banco de dados
+    	<property name="connection.username">root</property>
+aqui senha dele
+    	<property name="connection.password">secret</property>
+aqui para mostra comantos que hibernate faz
+    	<property name="hibernate.show_sql ">true</property>
+aqui para fazer comando update sempre no banco de acordo que se muda com sua tabela
+    	<property name="hbm2ddl.auto">update</property>
+
+   ------------------------Alguns metodos do JPA-----------------------------
+AQUI PARA VC FAZER FACTORY CONEXÃO ABRIR UMA CONEXÃO
+EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("endereco");
+EntityManager manager = managerFactory.createEntityManager();
+
+//AQUI VC ABRE CONEXÃO PARA MODIFICAR TABELA
+manager.getTransaction().begin();
+ --> AQUI PARA FAZER COMMIT E MANDA PARA BD
+manager.getTransaction().commit();
+ -->AQUI PARA FECHAR CONEXÃO
+manager.close();
+
+AQUI PEGA CLASS PELO SEU ID
+Client client = manager.get(Client.class, id);
+return user;
+
+AQUI MANDA AS INFOS PARA BANCO DE DADOS
+manager.persist(Clint);
+
+AQUI PARA REMOVE
+manager.remove(Client);
+
+QUISER REMOVER UM ESPECIFICO USE FILD OU GET PARA PEGAR AQUELE POR ID
+Client client = manager.find(Client.class, id)
+manager.remove(Client);
+
+PARA FAZER PESQUISA EM JPA
+PARA VC FAZER A PESQUISA EM JPA, QUASE IGUAL NO SQL, SO QUE INVES DO * VC USA
+NAME DECLARADO COMO AQUI NO EXPLO FOI U
+String hql = "select distinct u.NAME from User u where u.created > '2020-01-01'";
+TEM TBM WHERE PARA COISAS ESPECIFICAS
+
+DISTINCT
+AQUI PARA NÃO PEGAR COISAS IGUAIS NOME OU ID ETC
+
+//AQUI PARA RETONA COISAS UNICAS EXEMPLO NOME
+Query<String> query = session.createQuery(hql , String.class);
+AQUI RETONA A LIST
+return query.list();
+AQUI RETORNA A LISTA TODA
+getResultStream()
+
+
+AQUI PARA UPDATE
+//PASSA CODIGO E RETONA ELA
+Query<User> query = session.createQuery("update User set level=level+1", User.class);
+int count = query.executeUpdate();
+
+
+
+
+---------------------------------------------MAPEAMENTO DE TABELA E TABELA RELACIONADA---------------------------------------
+@Entity
+@Table(name="user")
+class User {
+   @Column(name="id")
+   public Integer id;
+
+   @Column(name="name")
+   public String name;
+
+   @Column(name="endereco_ID")
+   public Integer endereco;
+
+   @Column(name="deadline")
+   public Date deadline;
+}
+
+@Entity
+@Table(name="endereco")
+class enderco {
+   @Column(name="id")
+   public Integer id;
+
+   @Column(name="name")
+   public String rua;
+
+   @Column(name="salary")
+   public Integer bairro;
+
+   @Column(name="join_date")
+   public int number;
+}
+COMO FAZER RELACIONAMENTO E MOSTRA RELACIONAMENTO NA CLASS USER
+
+@Entity
+@Table(name="user")
+class User {
+   @Column(name="id")
+   public Integer id;
+
+   @Column(name="name")
+   public String name;
+
+   @ManyToOne
+   @JoinColumn(name="employee_id", nullable=true)
+   public Endereco endereco;
+
+   @Column(name="deadline")
+   public Date deadline;
+}
+EXPLICANDO O CODIGO
+   @ManyToOne -> TIPO DE RELACIONAMENTO DELE QUE É DE 1 PARA MUITOS/ DE MUITOS PARA MUITOS/ OU DE 1 PARA 1  ETC
+   @JoinColumn(name="employee_id", nullable=true)--> JUNTAR TABELA -> NAME QUE ESTA SALVO NO BANCO
+   public Endereco endereco;
+
+//FAZENDO SELECT COM JOIN
+SELECT USER.* FROM USER JOIN ENDERECO ON USER.employee_id = ENDERECO.id
+WHERE USER.name = "Ivan Ivanovich";
+// PASSANDO PARAMETRO
+        String jdpt = "SELECT e FROM Endereco e WHERE e.rua = ?1 ";
+      return entityManager.createQuery(jdpt,Endereco.class).setParameter(1,RUA).getResultList();
+      VC PODE PASSA ? e usar setParameter(peloOqvcvaisubstirutiro?, e nome da rua  )
+
+      https://codegym.cc/pt/quests/lectures/pt.questhibernate.level10.lecture05
+
+
+
+
+
+
+
+
+
+
 
 
 // EXPLICANDO ALGUMAS ANOTAÇÃO JPA
-@Entity    ---> QUE ESSA CLASS REPRESENTA ALGUMA TABELA NO BANCO DE DADOS
 @Table(name = "")   -----> SE SEU BANCO DE DADOS E SUA TABELA TIVER NOME DIFERENTES JPA ACHAR TABELA REPRESENTADA PELA
 ENTIDADE
    @Id ----> QUE AQUELE ATRIBUTO É CHAVE PRIMARIA NO BANCO DE DADOS
@@ -150,6 +320,10 @@ public String listName(String name){
      //depois vc tem que na tabela que vc vai relacionar normalmente de muitos para um
      // @OneToMany colocar essa tag
      // antes disso vc tem cadastra a categoria para depois passar para eles relacionamente
+@Embeddable-> class que vc quer unir
+@Embedded-> atributo onde unir
+private Enderec endereco;
+
 
 
     @ManyToOne Aqui mostra que entidade banco relacional
