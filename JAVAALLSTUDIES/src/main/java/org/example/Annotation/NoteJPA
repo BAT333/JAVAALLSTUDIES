@@ -38,7 +38,7 @@ class User {
    aqui nullable mostra que não pode ser null
    public Integer level;
 
-   @Column(name="created_date")
+   @Column(name="created_date",unique = true)
    public Date createdDate;
 }
 
@@ -327,5 +327,10 @@ private Enderec endereco;
 
 
     @ManyToOne Aqui mostra que entidade banco relacional
+
+    O @ManyToOne diz que um Review tem um Usuario e um Usuario pode ter muitos Review. Desta maneira,
+     quando você carregar o Review, basta chamar review.getUsuario() para obter o usuário relacionado.
+
+    Procure por @OneToOne e @OneToMany. Ou melhor, leia a documentação do Hibernate
 
 

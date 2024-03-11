@@ -1,0 +1,125 @@
+SPRING BOOT MODIFICA AGORA VC TEM VIDA MAIS FACILITADA VC PODE DESVOLVER SUA API SEM PRECISA
+INSTALAR UM SERVIDOR
+TEM A TAG
+-------------------------------------------------------------------------------------------------------
+Para que se utiliza Lombok?
+O Lombok é um framework para Java que permite escrever código eliminando a verbosidade,
+o que permite ganhar tempo de desenvolvimento para o que realmente é importante. Seu uso
+permite gerar em tempo de compilação os métodos getters e setters, métodos construtores,
+padrão builder e muito mais.
+---------------------------------------------------------------------------------------------------------
+Spring Boot DevTools: Fornece reinicializações rápidas de aplicativos, LiveReload e configurações
+para melhorar a experiência de desenvolvimento.
+
+----------------------------------------------------------------------------------------------------------
+O Spring é um framework de desenvolvimento de aplicativos Java que oferece uma ampla gama de recursos
+para simplificar o desenvolvimento empresarial. Ele fornece recursos como Inversão de Controle (IoC),
+Injeção de Dependência (DI), suporte a transações, AOP (Aspect-Oriented Programming) e muito mais
+----------------------------------------------------------------------------------------------------------
+
+O que o aplicativo Spring run () faz?
+Spring contém classes Controller marcadas com a anotação @Controller e também existem classes de
+serviço anotadas com a anotação @Service. Agora, o que o método run() faz é verificar o caminho
+da classe e descobrir quais classes estão marcadas com a anotação @Controller ou @Service ou qualquer
+outra coisa
+
+O método refreshContext(context) no método run() de SpringApplication aciona uma atualização do contexto
+do aplicativo . Isso significa que o contexto do aplicativo será inicializado e configurado com todos
+os beans e componentes necessários para executar o aplicativo.
+
+
+Para que serve o @RestController?
+A anotação @RestController indica para o framework que se trata de um controlador Rest,
+voltado para o desenvolvimento de aplicações web Restful e facilita que nós lidemos com
+requisições web (POST, GET, PUT, etc) pois une o Controller a um ResponseBody para todos
+métodos marcados pelo RequestMapping
+
+
+O que é o RequestMapping?
+Já a anotação @RequestMapping é usada para mapear URLs como www. DNS_da_aplicação/cliente para toda
+uma classe ou para um método manipulador particular.
+
+O que é o GetMapping?
+@RequestMapping é uma anotação de nível de classe que define o prefixo de URL para todas as rotas de um
+controller. @GetMapping define uma rota que responde a requisições HTTP GET.
+
+O que é PostMapping?
+@PostMapping: Determina que o método aceitará requisições HTTP do tipo POST.
+@PutMapping: Determina que o método aceitará requisições HTTP do tipo PUT.
+@DeleteMapping: Determina que o método aceitará requisições HTTP do tipo DELETE.
+
+A anotação @RequestBody indica que o valor do objeto virá do corpo da requisição;
+E a anotação @Valid indica que os dados recebidos devem ser validados.
+
+A anotação @Autowired , por sua vez, é usada para injetar uma instância de uma classe gerenciada pelo
+Spring em outra classe. Essa anotação pode ser usada para injetar objetos em construtores,
+campos e métodos
+A anotação @Autowired , por sua vez, é usada para injetar uma instância de uma classe gerenciada
+pelo Spring em outra classe. Essa anotação pode ser usada para injetar objetos em construtores,
+campos e métodos
+
+A anotação @Transactional é comumente usada para declarar que um método ou classe deve ser executado dentro
+de uma transação. Neste exemplo, o método atualizarPessoa é anotado com @Transactional, o que indica que
+ele deve ser executado dentro de uma transação.
+
+ @NotNull -->não pode ser null
+ @NotBlank -->não pode ser null tem que ter valor
+ @Pattern(regexp = "\\d{11,16}")-->para parttern
+ @Email -> validação de email
+ @valid -->validar uma class
+ ---------------------------------------------------------------------------------------------------------------
+                                              PEGANDO
+      @PostMapping -> AQUI PEGA AS INFOS QUE ESTA MANDO DO FRONT
+      @Transactional -> AQUI QUANDO TA TENDO TRASISOENES DE INFORMAÇÃO ATIVA ENTRE CLASS BANCO
+      @RequestBody -> DE ONDE PEGA INFORMAÇÃO E PARA ONDE VAI MANDAR
+      public void cadastroClient(@RequestBody @Valid DadosClient dados){
+          Client client = new Client(dados);
+          repository.save(client);-> SALVAR NO BANCO MAS FALAMOS DISTO MAIS PARA FRENTE
+          Integer cvv = Integer.valueOf(Cardrandom.numbersS(2));
+          Card card = new Card(null, BigDecimal.valueOf(Cardrandom.numbers(15)), LocalDate.now().plusYears(4).plusMonths(6),cvv,BigDecimal.ZERO,false,dados.cpf(),client);
+          repositoryCard.save(card);
+      }
+ --------------------------------------------------------------------------------------------------------------
+                                              LISTAGEM
+@GetMapping--> PEGA A INFO E MANDA
+    public List<Client> clients(){
+        return repository.findAll();-> AQUI DO BANCO DE DADOS MANDA RETORNA
+
+    }
+   return repository.findAll()--> returna infos de uma tabela
+   .stream()--> trasforma em lista fixa que da para ser usada por meio de for loop
+   .map
+   (DadosListClient::new) -> aqui chave é dadosList e valor nova instancia dela
+   .toList();-> trasforma tudo em list
+
+
+Já as streams são estruturas de dados fixas, cujos elementos são calculados sob demanda.
+Quando a interface Collection é usada, o usuário deve se ocupar da iteração (por exemplo,
+mediante foreach, laço for melhorado); essa abordagem é chamada de iteração externa.
+
+Os mapas Java são usados para muitas funções e operações diferentes, mas,
+em resumo, são uma forma de rastrear informações na forma de pares chave-valor .
+Em Java, um mapa pode consistir em praticamente qualquer número de pares chave-valor,
+mas as chaves devem ser sempre exclusivas – não repetitivas.
+
+
+-------------------------------------------------------------------------------------------------------------
+Pageable --> é uma class que faz paginação de uma pagina automaticamente, sem precisa vc calcular nada
+ return repository.findAll(Pageable)..map(DadosListClient::new) --> bem mais simples e carrega a pagina de acordo
+ que fronte quere  e bom so passa atributo Pageable dentro e fazer lista dele
+ public Page<DadosListCard> cardList(Pageable pageable){
+         return repository.findAll(pageable).map(DadosListCard::new);
+         //size=1&page=3;
+http://localhost:8080/cliente/Listar?size=1&page=1
+http://localhost:8080/hello/sort=nome -> forma de ordenação
+@PageableDefault(size = 10,sort = {"name"})--> vc pode colocar isso como anotação no lado do parametro pageable
+para vc falar como quer quando não tiver nada configurado na url
+spring.data.web.pageable.page-parameter=pagina
+spring.data.web.pageable.size-parameter=tamanho
+spring.data.web.sort.sort-parameter=ordem
+assim que vc pode altera nomes da forma que vc achar melhor
+spring.jpa.show-sql=true
+     }
+
+
+//https://github.com/spring-projects/spring-boot/wiki -> para saber novidades dos spring boot
